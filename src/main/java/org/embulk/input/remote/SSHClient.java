@@ -8,6 +8,7 @@ import net.schmizz.sshj.signature.SignatureECDSA;
 import net.schmizz.sshj.signature.SignatureRSA;
 import net.schmizz.sshj.xfer.InMemoryDestFile;
 import net.schmizz.sshj.xfer.LocalDestFile;
+import net.schmizz.sshj.xfer.scp.SCPFileTransfer;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -68,9 +69,11 @@ public class SSHClient implements Closeable {
 		}
 	}
 
-	public void scpDownload(String path, OutputStream stream) throws IOException {
+	public void scpDownload(String path, int limit, OutputStream stream) throws IOException {
 		client.useCompression();
-		client.newSCPFileTransfer().download(path, new InMemoryDestFileImpl(stream));
+		SCPFileTransfer ft = client.newSCPFileTransfer();
+		ft = ft.bandwidthLimit(limit);
+		ft.download(path, new InMemoryDestFileImpl(stream));
 	}
 
 	private static class InMemoryDestFileImpl extends InMemoryDestFile {

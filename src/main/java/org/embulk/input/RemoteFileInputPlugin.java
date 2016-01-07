@@ -54,6 +54,10 @@ public class RemoteFileInputPlugin
 		@ConfigDefault("\"\"")
 		public String getPath();
 
+		@Config("limit")
+		@ConfigDefault("0")
+		public int getLimit();
+
 		@Config("path_command")
 		@ConfigDefault("null")
 		public Optional<String> getPathCommand();
@@ -233,7 +237,7 @@ public class RemoteFileInputPlugin
 		try (SSHClient client = SSHClient.getInstance()) {
 			client.connect(target.getHost(), task.getAuth());
 			final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			client.scpDownload(target.getPath(), stream);
+			client.scpDownload(target.getPath(), task.getLimit(), stream);
 			return new ByteArrayInputStream(stream.toByteArray());
 		}
 	}
