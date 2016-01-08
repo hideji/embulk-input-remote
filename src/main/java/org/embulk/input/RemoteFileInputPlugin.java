@@ -55,7 +55,7 @@ public class RemoteFileInputPlugin
 		public String getPath();
 
 		@Config("limit")
-		@ConfigDefault("0")
+		@ConfigDefault("-1")
 		public int getLimit();
 
 		@Config("path_command")
